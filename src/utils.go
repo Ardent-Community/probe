@@ -1,5 +1,6 @@
 /*
-The following code contains some utility functions used in the project.
+The following code contains some utility functions used in the project, mainly related to
+file IO.
 
 Author: Shravan Asati
 Originially Written: 19 June 2021
@@ -11,6 +12,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"bufio"
 	"math/rand"
 	"os"
 	"os/user"
@@ -23,7 +25,7 @@ func randomFileName(lang string) string {
 	rand.Seed(time.Now().UnixNano())
 
 	var filename string
-	for len(filename) <= 8 {
+	for len(filename) <= 12 {
 		filename += string(characters[rand.Intn(len(characters))])
 	}
 
@@ -56,6 +58,7 @@ func writeToFile(filename, content string) {
 }
 
 func clearClutter() {
+	// * getting user's homedir
 	usr, e := user.Current()
 	if e != nil {
 		log("error", "unable to get homedir")
@@ -63,6 +66,7 @@ func clearClutter() {
 		return
 	}
 
+	// * determining probe's directory
 	dir := filepath.Join(usr.HomeDir, ".probe")
 	files, er := ioutil.ReadDir(dir)
 	if er != nil {
@@ -71,6 +75,7 @@ func clearClutter() {
 		return
 	}
 
+	// * clearing all files in the probe's directory
 	for _, f := range files {
 		path := filepath.Join(dir, f.Name())
 		if e := os.Remove(path); e != nil {
@@ -79,4 +84,3 @@ func clearClutter() {
 		}
 	}
 }
-
