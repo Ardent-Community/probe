@@ -21,15 +21,15 @@ const (
 )
 
 
-func logger(severity, message string) {
+func log(severity, message string) {
 	if severity == "info" {
 		fmt.Println(colorGreen, message, colorReset)
 
 	} else if severity == "error" {
-		fmt.Println(colorGreen, message, colorReset)
+		fmt.Println(colorRed, message, colorReset)
 
 	} else if severity == "success" {
-		fmt.Println(colorGreen, message, colorReset)
+		fmt.Println(colorBlue, message, colorReset)
 
 	} else {
 		fmt.Println("Fatal error. Invalid logging severity:", severity)
