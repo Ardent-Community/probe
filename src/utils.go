@@ -12,7 +12,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"bufio"
 	"math/rand"
 	"os"
 	"os/user"
