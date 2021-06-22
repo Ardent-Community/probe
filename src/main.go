@@ -1,21 +1,35 @@
 /*
 The main functioning of the probe cli. Spawns multiple goroutines to asynchronously
-run test cases against the solutions.
+runs test cases against the solutions.
 
 Author: Shravan Asati
-Originially Written: 19 June 2021
-Last Edited: 19 June 2021
+Originially Written: 22 June 2021
+Last Edited: 22 June 2021
 */
 
 package main
 
-import "fmt"
+import "os"
+
 
 func main() {
-	// f := "./" + randomFileName("javascript")
-	// writeToFile(f, "# hey")
+	probeDir := getProbeDir()
+	_, e := os.Stat(probeDir)
+	if os.IsNotExist(e) {
+		os.Mkdir(probeDir, os.ModePerm)
+	}
+	os.Chdir(probeDir)
 
-	// log("success", "The app is working.")
-	r := test()
-	fmt.Println(r.Solutions["username1"]["language"] + "\n", r.Solutions["username1"]["code"])
+
+	// solutions := getSolutions("1").Solutions
+	solutions := tempSolutions().Solutions
+
+	for username, data := range solutions {
+		lang := data["language"]
+		code := data["code"]
+		log("info", "running "+ username + "'s solution written in " + lang)
+		filename := username + randomFileName(lang)
+		writeToFile(filename, code)
+		executeFile(filename)
+	}
 }

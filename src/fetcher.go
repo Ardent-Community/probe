@@ -39,7 +39,7 @@ func getSolutions(challengeNumber string) Result {
 	return result
 }
 
-func test() Result {
+func tempSolutions() Result {
 	body := []byte(`{
 	"ok": true,
 	"solutions":  {

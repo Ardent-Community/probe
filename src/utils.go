@@ -19,6 +19,19 @@ import (
 	"time"
 )
 
+func getProbeDir() string {
+	usr, e := user.Current()
+	if e != nil {
+		log("error", "unable to get homedir")
+		fmt.Println(e)
+		return ""
+	}
+
+	// * determining probe's directory
+	dir := filepath.Join(usr.HomeDir, ".probe")
+	return dir
+}
+
 func randomFileName(lang string) string {
 	characters := "abcdefghijklmnopqrstuvwxyz-1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	rand.Seed(time.Now().UnixNano())
@@ -33,7 +46,7 @@ func randomFileName(lang string) string {
 	} else if lang == "javascript" {
 		filename += ".js"
 	} else {
-		log("error", "invalid value for the lang parameter: " + lang)
+		log("error", "invalid value for the lang parameter: "+lang)
 	}
 
 	return filename
@@ -50,24 +63,14 @@ func writeToFile(filename, content string) {
 	defer f.Close()
 
 	if _, e := f.WriteString(content); e != nil {
-		log("error", "unable to write to file " + filename)
+		log("error", "unable to write to file "+filename)
 		fmt.Println(e)
 		return
 	}
 }
 
 func clearClutter() {
-	// * getting user's homedir
-	usr, e := user.Current()
-	if e != nil {
-		log("error", "unable to get homedir")
-		fmt.Println(e)
-		return
-	}
-
-	// * determining probe's directory
-	dir := filepath.Join(usr.HomeDir, ".probe")
-	files, er := ioutil.ReadDir(dir)
+	files, er := ioutil.ReadDir(getProbeDir())
 	if er != nil {
 		log("error", "unable to get files in the directory")
 		fmt.Println(er)
@@ -76,7 +79,7 @@ func clearClutter() {
 
 	// * clearing all files in the probe's directory
 	for _, f := range files {
-		path := filepath.Join(dir, f.Name())
+		path := filepath.Join(getProbeDir(), f.Name())
 		if e := os.Remove(path); e != nil {
 			log("error", "unable to remove file "+path)
 			fmt.Println(e)
