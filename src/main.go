@@ -9,9 +9,13 @@ Last Edited: 19 June 2021
 
 package main
 
-func main() {
-	f := "./" + randomFileName("javascript")
-	writeToFile(f, "# hey")
+import "fmt"
 
-	log("success", "The app is working.")
+func main() {
+	// f := "./" + randomFileName("javascript")
+	// writeToFile(f, "# hey")
+
+	// log("success", "The app is working.")
+	r := test()
+	fmt.Println(r.Solutions["username1"]["language"] + "\n", r.Solutions["username1"]["code"])
 }

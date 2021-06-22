@@ -1,0 +1,13 @@
+{
+	"ok": true,
+	"solutions": {
+		"username1": {
+			"language": "python",
+			"code": "from time import sleep\nsleep(1)"
+		},
+		"username2": {
+			"language": "javascript",
+			"code": "console.log('hey')"
+		}
+	}
+}
