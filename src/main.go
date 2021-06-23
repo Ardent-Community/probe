@@ -21,8 +21,7 @@ func main() {
 	os.Chdir(probeDir)
 
 
-	// solutions := getSolutions("1").Solutions
-	solutions := tempSolutions().Solutions
+	solutions := getSolutions("1").Solutions
 
 	for username, data := range solutions {
 		lang := data["language"]

@@ -1,3 +1,11 @@
+/*
+Fetches solutions from the API and returns them as part of the Result struct.
+
+Author: Shravan Asati
+Originially Written: 22 June 2021
+Last Edited: 23 June 2021
+*/
+
 package main
 
 import (
@@ -17,7 +25,7 @@ func getSolutions(challengeNumber string) Result {
 		panic("API KEY NOT FOUND")
 	}
 
-	endpoint := "https://domain.name/api/solutions/" + challengeNumber + "?apiKey=" + apiKey
+	endpoint := "http://127.0.0.1:5000/api/solutions/" + challengeNumber + "?apiKey=" + apiKey
 
 	res, err := http.Get(endpoint)
 	if err != nil {
@@ -36,27 +44,5 @@ func getSolutions(challengeNumber string) Result {
 		panic("unable to write json to struct")
 	}
 
-	return result
-}
-
-func tempSolutions() Result {
-	body := []byte(`{
-	"ok": true,
-	"solutions":  {
-		"username1": {
-			"language": "python",
-			"code": "from time import sleep\nsleep(1)"
-		},
-		"username2": {
-			"language": "javascript",
-			"code": "console.log('hey')"
-		}
-	}
-}
-	`)
-	result := Result{}
-	if e := json.Unmarshal(body, &result); e != nil {
-		panic(e)
-	}
 	return result
 }
