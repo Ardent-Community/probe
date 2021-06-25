@@ -9,15 +9,14 @@ Last Edited: 22 June 2021
 package main
 
 import (
-	"fmt"
 	"os/exec"
-	// "strings"
+	"strings"
 	"bytes"
 )
 
 func execute(command string ) (string, error) {
-	// separated:= strings.Fields(command)
-	cmd := exec.Command("python3", "./test.py")
+	separated:= strings.Fields(command)
+	cmd := exec.Command(separated[0], separated...)
     var stdout, stderr bytes.Buffer
     cmd.Stdout = &stdout
     cmd.Stderr = &stderr
@@ -25,16 +24,4 @@ func execute(command string ) (string, error) {
     outStr := (stdout.String())
 
 	return outStr, err
-}
-
-func main() {
-	out, e := execute("python3 ./test.py")
-	if e != nil {
-		panic(e)
-	}
-	if out == "25" {
-		fmt.Println("hoorray")
-	} else {
-		fmt.Println("nope")
-	}
 }

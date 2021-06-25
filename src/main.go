@@ -19,6 +19,7 @@ func main() {
 		os.Mkdir(probeDir, os.ModePerm)
 	}
 	os.Chdir(probeDir)
+	clearClutter()
 
 
 	solutions := getSolutions("1").Solutions
