@@ -16,6 +16,7 @@ import (
 
 func execute(command string ) (string, error) {
 	separated:= strings.Fields(command)
+
 	cmd := exec.Command(separated[0], separated...)
     var stdout, stderr bytes.Buffer
     cmd.Stdout = &stdout

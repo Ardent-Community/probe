@@ -1,0 +1,12 @@
+{
+	"pythonCases": {
+		"solution(3)": "9\n",
+		"solution(5)": "25\n",
+		"solution(25)": "625\n"
+	},
+	"javascriptCases": {
+		"solution(3)": "9\n",
+		"solution(5)": "25\n",
+		"solution(25)": "625\n"
+	}
+}

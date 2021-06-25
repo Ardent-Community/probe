@@ -12,6 +12,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"bufio"
 	"math/rand"
 	"os"
 	"os/user"
@@ -85,4 +86,21 @@ func clearClutter() {
 			fmt.Println(e)
 		}
 	}
+}
+
+func readFile(file string) string {
+	f, ferr := os.Open(file)
+	if ferr != nil {
+		log("error", "unable to read file " + file)
+		panic(ferr)
+	}
+	defer f.Close()
+
+	text := ""
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		text += scanner.Text()
+	}
+
+	return text
 }

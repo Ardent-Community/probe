@@ -9,27 +9,27 @@ Last Edited: 22 June 2021
 
 package main
 
-import "os"
+// import "os"
 
 
-func main() {
-	probeDir := getProbeDir()
-	_, e := os.Stat(probeDir)
-	if os.IsNotExist(e) {
-		os.Mkdir(probeDir, os.ModePerm)
-	}
-	os.Chdir(probeDir)
-	clearClutter()
+// func main() {
+// 	probeDir := getProbeDir()
+// 	_, e := os.Stat(probeDir)
+// 	if os.IsNotExist(e) {
+// 		os.Mkdir(probeDir, os.ModePerm)
+// 	}
+// 	os.Chdir(probeDir)
+// 	clearClutter()
 
 
-	solutions := getSolutions("1").Solutions
+// 	solutions := getSolutions("1").Solutions
 
-	for username, data := range solutions {
-		lang := data["language"]
-		code := data["code"]
-		log("info", "running "+ username + "'s solution written in " + lang)
-		filename := username + randomFileName(lang)
-		writeToFile(filename, code)
-		execute(filename)
-	}
-}
+// 	for username, data := range solutions {
+// 		lang := data["language"]
+// 		code := data["code"]
+// 		log("info", "running "+ username + "'s solution written in " + lang)
+// 		filename := username + randomFileName(lang)
+// 		writeToFile(filename, code)
+// 		execute(filename)
+// 	}
+// }
