@@ -11,12 +11,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	// "fmt"
-	"strings"
+	"path/filepath"
 )
 
 type Tester struct {
 	testCases TestCases
+	testCasesFile string
+	code string
+	lang string
 }
 
 type TestCases struct {
@@ -24,9 +26,9 @@ type TestCases struct {
 	JavascriptCases map[string]string `json:javascriptCases`
 }
 
-func (tester *Tester) getTestCases(testfile string) {
+func (tester *Tester) getTestCases() {
 	tc := TestCases{}
-	fileContent := readFile(testfile)
+	fileContent := readFile(tester.testCasesFile)
 
 	if e := json.Unmarshal([]byte(fileContent), &tc); e != nil {
 		log("error", "unable to decode json into testcases")
@@ -35,53 +37,42 @@ func (tester *Tester) getTestCases(testfile string) {
 	tester.testCases = tc
 }
 
-func (tester *Tester) testCode(codefile, testfile string) bool {
+func (tester *Tester) testCode() bool {
 	passed := false
 	// todo add regex hunting
 
-	tester.getTestCases(testfile)
-	lang := ""
-	if strings.HasSuffix(codefile, ".py") {
-		lang = "python"
-	} else if strings.HasSuffix(codefile, ".js") {
-		lang = "javascript"
-	} else {
-		panic("invalid language type")
-	}
+	tester.getTestCases()
 
-	if lang == "python" {
+	if tester.lang == "python" {
 		for in, out := range tester.testCases.PythonCases {
-			writeToFile(codefile, readFile(codefile)+"\n"+in)
-			output, e := execute("python3 " + codefile)
+			filename := filepath.Join(getProbeDir(), randomFileName("python"))
+			writeToFile(filename, tester.code + "\n\n" + in)
+			output, e := execute("python3 " + filename)
 			if e != nil {
 				log("error", "The command failed to execute!")
-				writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
 				return false
 			}
 			if output != out {
 				log("error", "The output isnt the same as expected!")
-				writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
 				return false
 			}
-			writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
+			log("info", "passed first test")
 		}
 		passed = true
 
-	} else if lang == "javascript" {
+	} else if tester.lang == "javascript" {
 		for in, out := range tester.testCases.JavascriptCases {
-			writeToFile(codefile, readFile(codefile)+"\n"+in)
-			output, e := execute("node " + codefile)
+			filename := filepath.Join(getProbeDir(), randomFileName("python"))
+			writeToFile(filename, tester.code + "\n\n" + in)
+			output, e := execute("python3 " + filename)
 			if e != nil {
 				log("error", "The command failed to execute!")
-				writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
 				return false
 			}
 			if output != out {
 				log("error", "The output isnt the same as expected!")
-				writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
 				return false
 			}
-			writeToFile(codefile, strings.ReplaceAll(codefile, in, ""))
 		}
 		passed = true
 	
@@ -94,8 +85,9 @@ func (tester *Tester) testCode(codefile, testfile string) bool {
 }
 
 func main() {
-	ts := Tester{}
-	passed := ts.testCode("./test.py", "./example_testcases.json")
+	clearClutter()
+	ts := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
+	passed := ts.testCode()
 	fmt.Println(passed)
 	// o, e := execute("python3 ./test.py")
 	// fmt.Printf("Output: \n%v \nError: \n%v", o ,e)

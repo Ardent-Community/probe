@@ -1,2 +1,2 @@
-def solution(n):        print(n * n)
-solution(5)
+def solution(n):
+    print(n * n)

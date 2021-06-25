@@ -28,8 +28,14 @@ func getProbeDir() string {
 		return ""
 	}
 
+	
 	// * determining probe's directory
 	dir := filepath.Join(usr.HomeDir, ".probe")
+
+	_, er := os.Stat(dir)
+	if os.IsNotExist(er) {
+		os.Mkdir(dir, os.ModePerm)
+	}
 	return dir
 }
 
