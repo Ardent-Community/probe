@@ -11,31 +11,30 @@ package main
 import (
 	"fmt"
 	"os/exec"
-	"strings"
+	// "strings"
+	"bytes"
 )
 
-func executeFile(command string ) {
-	executable := ""
+func execute(command string ) (string, error) {
+	// separated:= strings.Fields(command)
+	cmd := exec.Command("python3", "./test.py")
+    var stdout, stderr bytes.Buffer
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    outStr := (stdout.String())
 
-	if strings.HasSuffix(command, ".py") {
-		executable = "python3"
-	} else if strings.HasSuffix(command, ".js") {
-		executable = "node"
+	return outStr, err
+}
+
+func main() {
+	out, e := execute("python3 ./test.py")
+	if e != nil {
+		panic(e)
+	}
+	if out == "25" {
+		fmt.Println("hoorray")
 	} else {
-		log("error", "invalid filename!")
-		return
-	}
-
-	cmd := exec.Command(executable, command)
-	out, err := cmd.Output()
-
-	if err != nil {
-		log("error", "the command failed to execute!")
-		fmt.Println(err)
-		return
-	}
-
-	if string(out) == "test" {
-		log("success", "the test passed")
+		fmt.Println("nope")
 	}
 }

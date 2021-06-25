@@ -29,6 +29,6 @@ func main() {
 		log("info", "running "+ username + "'s solution written in " + lang)
 		filename := username + randomFileName(lang)
 		writeToFile(filename, code)
-		executeFile(filename)
+		execute(filename)
 	}
 }
