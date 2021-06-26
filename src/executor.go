@@ -9,20 +9,41 @@ Last Edited: 22 June 2021
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os/exec"
 	"strings"
-	"bytes"
 )
 
-func execute(command string ) (string, error) {
-	separated:= strings.Fields(command)
+func execute(command string) (string, error) {
+	newCommand := strings.Fields(command)
+	cmd := exec.Command(newCommand[0], newCommand[1:]...)
 
-	cmd := exec.Command(separated[0], separated...)
-    var stdout, stderr bytes.Buffer
-    cmd.Stdout = &stdout
-    cmd.Stderr = &stderr
-    err := cmd.Run()
-    outStr := (stdout.String())
+	stdout, e := cmd.StdoutPipe()
+	if e != nil {
+		log("error", "stdout failed")
+		return "", e
+	}
 
-	return outStr, err
+	if err := cmd.Start(); err != nil {
+		log("error", "start failed")
+		return "", err
+	}
+
+	data, err := ioutil.ReadAll(stdout)
+	if err != nil {
+		log("error", "reading failed")
+		return "", err
+	}
+
+	if we := cmd.Wait(); we != nil {
+		log("error", "wait failed")
+	}
+
+	return string(data), nil
+}
+
+func main() {
+	o, e := execute("python3 ./test.py")
+	fmt.Println(o, e)
 }

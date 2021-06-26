@@ -10,7 +10,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"path/filepath"
 )
 
@@ -84,11 +84,11 @@ func (tester *Tester) testCode() bool {
 	return passed
 }
 
-func main() {
-	clearClutter()
-	ts := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
-	passed := ts.testCode()
-	fmt.Println(passed)
-	// o, e := execute("python3 ./test.py")
-	// fmt.Printf("Output: \n%v \nError: \n%v", o ,e)
-}
+// func main() {
+// 	clearClutter()
+// 	ts := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
+// 	passed := ts.testCode()
+// 	fmt.Println(passed)
+// 	// o, e := execute("python3 ./test.py")
+// 	// fmt.Printf("Output: \n%v \nError: \n%v", o ,e)
+// }
