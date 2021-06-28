@@ -55,11 +55,11 @@ func testCode(lang, code, in, out string) bool {
 
 	// * checking if the code passed
 	if e != nil {
-		log("error", "The command failed to execute!")
+		log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 	if output != out {
-		log("error", "The output isnt the same as expected!")
+		log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 
@@ -68,11 +68,17 @@ func testCode(lang, code, in, out string) bool {
 }
 
 func (tester *Tester) performTests() bool {
-	// todo add regex hunting
-
+	// * getting test cases
 	tester.getTestCases()
 
 	if tester.lang == "python" {
+		// * hunting for exec, eval and imports
+		if hunt("python", tester.code) {
+			log("error", "the code breaks the rules")
+			return false
+		}
+
+		// * executing the test cases
 		for in, out := range tester.testCases.PythonCases {
 			passed := testCode("python", tester.code, in, out)
 			if !passed {
@@ -82,6 +88,13 @@ func (tester *Tester) performTests() bool {
 		return true
 
 	} else if tester.lang == "javascript" {
+		// * hunting for exec, eval and imports
+		if hunt("javascript", tester.code) {
+			log("error", "the code breaks the rules")
+			return false
+		}
+
+		// * executing the test cases
 		for in, out := range tester.testCases.JavascriptCases {
 			passed := testCode("javascript", tester.code, in, out)
 			if !passed {
