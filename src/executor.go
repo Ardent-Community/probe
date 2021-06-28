@@ -9,7 +9,7 @@ Last Edited: 22 June 2021
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"io/ioutil"
 	"os/exec"
 	"strings"
@@ -43,7 +43,7 @@ func execute(command string) (string, error) {
 	return string(data), nil
 }
 
-func main() {
-	o, e := execute("python3 ./test.py")
-	fmt.Println(o, e)
-}
+// func main() {
+// 	o, e := execute("node test.js")
+// 	fmt.Println(o, e)
+// }
