@@ -38,7 +38,7 @@ func hunt(lang, code string) bool {
 			return true
 		}
 
-		importPattern, _ := regexp.Compile(".require[(.)]|import(.)from(.)")
+		importPattern, _ := regexp.Compile(".require[(.)]|import.*?from.*?")
 		importMatch := importPattern.MatchString(code)
 
 		if importMatch {
@@ -50,4 +50,3 @@ func hunt(lang, code string) bool {
 	}
 	return false
 }
-
