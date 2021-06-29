@@ -15,10 +15,12 @@ import (
 	"os"
 )
 
+// Result struct contains all the parameters returned by the solutions API.
 type Result struct {
 	Solutions map[string]map[string]string `json:solutions`
 }
 
+// getSolutions makes a request to the API server and returns a `Result` struct filled with solutions.
 func getSolutions(challengeNumber string) Result {
 	// * getting the api key
 	apiKey := os.Getenv("PROBE_API_KEY")

@@ -10,10 +10,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"path/filepath"
 )
 
+// Tester struct is the main struct which has methods related to testing the code.
 type Tester struct {
 	testCases     TestCases
 	testCasesFile string
@@ -21,11 +22,13 @@ type Tester struct {
 	lang          string
 }
 
+// TestCases has python and javascript test cases, and is a part of the `Tester` struct.
 type TestCases struct {
 	PythonCases     map[string]string `json:pythonCases`
 	JavascriptCases map[string]string `json:javascriptCases`
 }
 
+// getTestCases reads the test cases from the given file and assigns them to the `Tester` struct.
 func (tester *Tester) getTestCases() {
 	tc := TestCases{}
 	fileContent := readFile(tester.testCasesFile)
@@ -37,6 +40,7 @@ func (tester *Tester) getTestCases() {
 	tester.testCases = tc
 }
 
+// testCode writes the given code to a file, executes the file, checks the output against the test case and returns a boolean variable whether the code passed or not.
 func testCode(lang, code, in, out string) bool {
 	// * writing code to a file
 	filename := filepath.Join(getProbeDir(), randomFileName(lang))
@@ -55,18 +59,19 @@ func testCode(lang, code, in, out string) bool {
 
 	// * checking if the code passed
 	if e != nil {
-		log("error", fmt.Sprintf("the code failed `%v` test", in))
+		// log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 	if output != out {
-		log("error", fmt.Sprintf("the code failed `%v` test", in))
+		// log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 
-	log("info", fmt.Sprintf("the code passed `%v` test", in))
+	// log("info", fmt.Sprintf("the code passed `%v` test", in))
 	return true
 }
 
+// performTests is the main tester function. It first gets the test cases, hunts the code for imports, exec and eval functions and tests the code, again returning a boolean variable.
 func (tester *Tester) performTests() bool {
 	// * getting test cases
 	tester.getTestCases()
@@ -74,7 +79,7 @@ func (tester *Tester) performTests() bool {
 	if tester.lang == "python" {
 		// * hunting for exec, eval and imports
 		if hunt("python", tester.code) {
-			log("error", "the code breaks the rules")
+			// log("error", "the code breaks the rules")
 			return false
 		}
 
@@ -90,7 +95,7 @@ func (tester *Tester) performTests() bool {
 	} else if tester.lang == "javascript" {
 		// * hunting for exec, eval and imports
 		if hunt("javascript", tester.code) {
-			log("error", "the code breaks the rules")
+			// log("error", "the code breaks the rules")
 			return false
 		}
 
@@ -110,13 +115,13 @@ func (tester *Tester) performTests() bool {
 	return false
 }
 
-func main() {
-	ts := Tester{code: readFile("./test.js"), testCasesFile: "./example_testcases.json", lang: "javascript"}
-	passed := ts.performTests()
-	fmt.Println(passed)
-	
-	ts2 := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
-	passed2 := ts2.performTests()
-	fmt.Println(passed2)
-	clearClutter()
-}
+// func main() {
+// 	ts := Tester{code: readFile("./test.js"), testCasesFile: "./example_testcases.json", lang: "javascript"}
+// 	passed := ts.performTests()
+// 	fmt.Println(passed)
+
+// 	ts2 := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
+// 	passed2 := ts2.performTests()
+// 	fmt.Println(passed2)
+// 	clearClutter()
+// }

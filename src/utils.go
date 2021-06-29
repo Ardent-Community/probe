@@ -20,6 +20,7 @@ import (
 	"time"
 )
 
+// getProbeDir returns the probe home directory, namely `~/.probe`.
 func getProbeDir() string {
 	usr, e := user.Current()
 	if e != nil {
@@ -39,6 +40,7 @@ func getProbeDir() string {
 	return dir
 }
 
+// randomFileName returns a random file name with letters and numbers and some valid symbols mixed.
 func randomFileName(lang string) string {
 	characters := "abcdefghijklmnopqrstuvwxyz-1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	rand.Seed(time.Now().UnixNano())
@@ -59,6 +61,7 @@ func randomFileName(lang string) string {
 	return filename
 }
 
+// writeToFile writes the given content to the given filepath.
 func writeToFile(filename, content string) {
 	f, e := os.Create(filename)
 	if e != nil {
@@ -76,6 +79,7 @@ func writeToFile(filename, content string) {
 	}
 }
 
+// clearClutter deletes all the files present in probe's directory.
 func clearClutter() {
 	files, er := ioutil.ReadDir(getProbeDir())
 	if er != nil {
@@ -94,6 +98,7 @@ func clearClutter() {
 	}
 }
 
+// readFile reads the given file and returns the string content of the same.
 func readFile(file string) string {
 	f, ferr := os.Open(file)
 	if ferr != nil {

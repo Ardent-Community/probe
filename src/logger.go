@@ -21,6 +21,7 @@ const (
 )
 
 
+// log prints the given message according to the severity.
 func log(severity, message string) {
 	if severity == "info" {
 		fmt.Println(colorGreen, message, colorReset)

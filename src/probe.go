@@ -9,26 +9,36 @@ Last Edited: 22 June 2021
 
 package main
 
+import (
+	"sync"
+)
 
+func main() {
+	wg := sync.WaitGroup{}
+	solutions := getSolutions("1").Solutions
+	wg.Add(len(solutions))
 
-// func main() {
-// 	probeDir := getProbeDir()
-// 	_, e := os.Stat(probeDir)
-// 	if os.IsNotExist(e) {
-// 		os.Mkdir(probeDir, os.ModePerm)
-// 	}
-// 	os.Chdir(probeDir)
-// 	clearClutter()
+	for username, data := range solutions {
+		go func(username string, data map[string]string) {
+			lang := data["language"]
+			code := data["code"]
+			log("info", "running "+ username + "'s solution written in " + lang)
+			
+			t := Tester{
+				lang: lang,
+				code: code,
+				testCasesFile: "./example_testcases.json",
+			}
+			passed := t.performTests()
+			if passed {
+				log("success", username + "'s code passed")
+			} else {
+				log("info", username + "'s code failed")
+			}
+			wg.Done()
+		}(username, data)
+	}
 
-
-// 	solutions := getSolutions("1").Solutions
-
-// 	for username, data := range solutions {
-// 		lang := data["language"]
-// 		code := data["code"]
-// 		log("info", "running "+ username + "'s solution written in " + lang)
-// 		filename := username + randomFileName(lang)
-// 		writeToFile(filename, code)
-// 		execute(filename)
-// 	}
-// }
+	wg.Wait()
+	clearClutter()
+}

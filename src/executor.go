@@ -15,6 +15,7 @@ import (
 	"strings"
 )
 
+// execute executes the given command and returns the string output and error of the process.
 func execute(command string) (string, error) {
 	newCommand := strings.Fields(command)
 	cmd := exec.Command(newCommand[0], newCommand[1:]...)
