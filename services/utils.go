@@ -8,6 +8,7 @@ Last Edited: 29 June 2021
 */
 
 package services 
+// package main 
 
 import (
 	"fmt"
@@ -99,7 +100,7 @@ func ClearClutter() {
 }
 
 // readFile reads the given file and returns the string content of the same.
-func readFile(file string) string {
+func ReadFile(file string) string {
 	f, ferr := os.Open(file)
 	if ferr != nil {
 		Log("error", "unable to read file " + file)

@@ -7,6 +7,7 @@ Last Edited: 29 June 2021
 */
 
 package services 
+// package main 
 
 import (
 	"encoding/json"
@@ -17,6 +18,7 @@ import (
 
 // Result struct contains all the parameters returned by the solutions API.
 type Result struct {
+	Ok bool `json:ok`
 	Solutions map[string]map[string]string `json:solutions`
 }
 
@@ -59,6 +61,10 @@ func GetSolutions(challengeNumber string) Result {
 	result := Result{}
 	if e := json.Unmarshal(body, &result); e != nil {
 		panic("unable to write json to struct")
+	}
+
+	if !result.Ok {
+		panic("response not ok")
 	}
 
 	return result

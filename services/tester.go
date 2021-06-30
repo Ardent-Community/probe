@@ -7,6 +7,7 @@ Last Edited: 29 June 2021
 */
 
 package services
+// package main
 
 import (
 	"encoding/json"
@@ -31,7 +32,7 @@ type TestCases struct {
 // getTestCases reads the test cases from the given file and assigns them to the `Tester` struct.
 func (tester *Tester) getTestCases() {
 	tc := TestCases{}
-	fileContent := readFile(tester.TestCasesFile)
+	fileContent := ReadFile(tester.TestCasesFile)
 
 	if e := json.Unmarshal([]byte(fileContent), &tc); e != nil {
 		Log("error", "unable to decode json into testcases")
@@ -59,15 +60,15 @@ func testCode(lang, code, in, out string) bool {
 
 	// * checking if the code passed
 	if e != nil {
-		// log("error", fmt.Sprintf("the code failed `%v` test", in))
+		// Log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 	if output != out {
-		// log("error", fmt.Sprintf("the code failed `%v` test", in))
+		// Log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
 
-	// log("info", fmt.Sprintf("the code passed `%v` test", in))
+	// Log("info", fmt.Sprintf("the code passed `%v` test", in))
 	return true
 }
 
@@ -79,7 +80,7 @@ func (tester *Tester) PerformTests() bool {
 	if tester.Lang == "python" {
 		// * hunting for exec, eval and imports
 		if hunt("python", tester.Code) {
-			// log("error", "the code breaks the rules")
+			// Log("error", "the code breaks the rules")
 			return false
 		}
 
@@ -95,7 +96,7 @@ func (tester *Tester) PerformTests() bool {
 	} else if tester.Lang == "javascript" {
 		// * hunting for exec, eval and imports
 		if hunt("javascript", tester.Code) {
-			// log("error", "the code breaks the rules")
+			// Log("error", "the code breaks the rules")
 			return false
 		}
 
@@ -116,12 +117,12 @@ func (tester *Tester) PerformTests() bool {
 }
 
 // func main() {
-// 	ts := Tester{code: readFile("./test.js"), testCasesFile: "./example_testcases.json", lang: "javascript"}
-// 	passed := ts.performTests()
+// 	ts := Tester{Code: ReadFile("../examples/test.js"), TestCasesFile: "../examples/testcases.json", Lang: "javascript"}
+// 	passed := ts.PerformTests()
 // 	fmt.Println(passed)
 
-// 	ts2 := Tester{code: readFile("./test.py"), testCasesFile: "./example_testcases.json", lang: "python"}
-// 	passed2 := ts2.performTests()
+// 	ts2 := Tester{Code: ReadFile("../examples/test.py"), TestCasesFile: "../examples/testcases.json", Lang: "python"}
+// 	passed2 := ts2.PerformTests()
 // 	fmt.Println(passed2)
-// 	clearClutter()
+// 	ClearClutter()
 // }

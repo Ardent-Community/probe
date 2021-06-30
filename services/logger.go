@@ -9,17 +9,19 @@ Last Edited: 29 June 2021
 
 package services
 
+// package main
+
 import (
 	"fmt"
 )
 
 const (
-	colorRed   = "\033[31m"
-	colorGreen = "\033[32m"
-	colorBlue  = "\033[36m"
-	colorReset = "\033[0m"
+	colorRed    = "\033[31m"
+	colorGreen  = "\033[32m"
+	colorBlue   = "\033[36m"
+	colorYellow = "\033[33m"
+	colorReset  = "\033[0m"
 )
-
 
 // Log prints the given message according to the severity.
 func Log(severity, message string) {
@@ -31,6 +33,9 @@ func Log(severity, message string) {
 
 	} else if severity == "success" {
 		fmt.Println(colorBlue, message, colorReset)
+
+	} else if severity == "failure" {
+		fmt.Println(colorYellow, message, colorReset)
 
 	} else {
 		fmt.Println("Fatal error. Invalid logging severity:", severity)
