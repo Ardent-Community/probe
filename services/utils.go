@@ -4,10 +4,10 @@ file IO.
 
 Author: Shravan Asati
 Originially Written: 19 June 2021
-Last Edited: 19 June 2021
+Last Edited: 29 June 2021
 */
 
-package main
+package services 
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ import (
 func getProbeDir() string {
 	usr, e := user.Current()
 	if e != nil {
-		log("error", "unable to get homedir")
+		Log("error", "unable to get homedir")
 		fmt.Println(e)
 		return ""
 	}
@@ -55,7 +55,7 @@ func randomFileName(lang string) string {
 	} else if lang == "javascript" {
 		filename += ".js"
 	} else {
-		log("error", "invalid value for the lang parameter: "+lang)
+		Log("error", "invalid value for the lang parameter: "+lang)
 	}
 
 	return filename
@@ -65,7 +65,7 @@ func randomFileName(lang string) string {
 func writeToFile(filename, content string) {
 	f, e := os.Create(filename)
 	if e != nil {
-		log("error", "unable to open the file")
+		Log("error", "unable to open the file")
 		fmt.Println(e)
 		return
 	}
@@ -73,17 +73,17 @@ func writeToFile(filename, content string) {
 	defer f.Close()
 
 	if _, e := f.WriteString(content); e != nil {
-		log("error", "unable to write to file "+filename)
+		Log("error", "unable to write to file "+filename)
 		fmt.Println(e)
 		return
 	}
 }
 
-// clearClutter deletes all the files present in probe's directory.
-func clearClutter() {
+// ClearClutter deletes all the files present in probe's directory.
+func ClearClutter() {
 	files, er := ioutil.ReadDir(getProbeDir())
 	if er != nil {
-		log("error", "unable to get files in the directory")
+		Log("error", "unable to get files in the directory")
 		fmt.Println(er)
 		return
 	}
@@ -92,7 +92,7 @@ func clearClutter() {
 	for _, f := range files {
 		path := filepath.Join(getProbeDir(), f.Name())
 		if e := os.Remove(path); e != nil {
-			log("error", "unable to remove file "+path)
+			Log("error", "unable to remove file "+path)
 			fmt.Println(e)
 		}
 	}
@@ -102,7 +102,7 @@ func clearClutter() {
 func readFile(file string) string {
 	f, ferr := os.Open(file)
 	if ferr != nil {
-		log("error", "unable to read file " + file)
+		Log("error", "unable to read file " + file)
 		panic(ferr)
 	}
 	defer f.Close()

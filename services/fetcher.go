@@ -2,11 +2,11 @@
 Fetches solutions from the API and returns them as part of the Result struct.
 
 Author: Shravan Asati
-Originially Written: 22 June 2021
-Last Edited: 23 June 2021
+Originially Written: 25 June 2021
+Last Edited: 29 June 2021
 */
 
-package main
+package services 
 
 import (
 	"encoding/json"
@@ -20,8 +20,8 @@ type Result struct {
 	Solutions map[string]map[string]string `json:solutions`
 }
 
-// getSolutions makes a request to the API server and returns a `Result` struct filled with solutions.
-func getSolutions(challengeNumber string) Result {
+// GetSolutions makes a request to the API server and returns a `Result` struct filled with solutions.
+func GetSolutions(challengeNumber string) Result {
 	// * getting the api key
 	apiKey := os.Getenv("PROBE_API_KEY")
 	if apiKey == "" {

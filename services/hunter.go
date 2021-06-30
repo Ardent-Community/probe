@@ -3,11 +3,11 @@ This file contains the code for hunting the code using regular expressions for i
 and eval functions.
 
 Author: Shravan Asati
-Originally Written: 24 June 2021
-Last Edited: 24 June 2021
+Originally Written: 28 June 2021
+Last Edited: 29 June 2021
 */
 
-package main
+package services
 
 import (
 	"regexp"
@@ -46,7 +46,7 @@ func hunt(lang, code string) bool {
 		}
 
 	} else {
-		log("error", "invalid lang to hunt for: " + lang)
+		Log("error", "invalid lang to hunt for: " + lang)
 	}
 	return false
 }

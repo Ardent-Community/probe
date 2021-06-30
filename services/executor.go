@@ -2,11 +2,11 @@
 This file contains the code for the subprocess execution of the solutions.
 
 Author: Shravan Asati
-Originially Written: 22 June 2021
-Last Edited: 22 June 2021
+Originially Written: 26 June 2021
+Last Edited: 29 June 2021
 */
 
-package main
+package services
 
 import (
 	// "fmt"
@@ -22,23 +22,23 @@ func execute(command string) (string, error) {
 
 	stdout, e := cmd.StdoutPipe()
 	if e != nil {
-		log("error", "stdout failed")
+		Log("error", "stdout failed")
 		return "", e
 	}
 
 	if err := cmd.Start(); err != nil {
-		log("error", "start failed")
+		Log("error", "start failed")
 		return "", err
 	}
 
 	data, err := ioutil.ReadAll(stdout)
 	if err != nil {
-		log("error", "reading failed")
+		Log("error", "reading failed")
 		return "", err
 	}
 
 	if we := cmd.Wait(); we != nil {
-		log("error", "wait failed")
+		Log("error", "wait failed")
 	}
 
 	return string(data), nil

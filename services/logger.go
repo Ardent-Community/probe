@@ -4,10 +4,10 @@ different color codes.
 
 Author: Shravan Asati
 Originially Written: 19 June 2021
-Last Edited: 19 June 2021
+Last Edited: 29 June 2021
 */
 
-package main
+package services
 
 import (
 	"fmt"
@@ -21,8 +21,8 @@ const (
 )
 
 
-// log prints the given message according to the severity.
-func log(severity, message string) {
+// Log prints the given message according to the severity.
+func Log(severity, message string) {
 	if severity == "info" {
 		fmt.Println(colorGreen, message, colorReset)
 
