@@ -1,3 +1,3 @@
-module github.com/Ardent-Community/probe-cli
+module github.com/Ardent-Community/probe
 
 go 1.16

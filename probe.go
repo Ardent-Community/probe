@@ -11,7 +11,7 @@ package main
 
 import (
 	"sync"
-	serve "github.com/Ardent-Community/probe-cli/services"
+	serve "github.com/Ardent-Community/probe/services"
 )
 
 func main() {
