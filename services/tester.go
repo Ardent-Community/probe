@@ -32,7 +32,7 @@ type TestCases struct {
 // getTestCases reads the test cases from the given file and assigns them to the `Tester` struct.
 func (tester *Tester) getTestCases() {
 	tc := TestCases{}
-	fileContent := ReadFile(tester.TestCasesFile)
+	fileContent := readFile(tester.TestCasesFile)
 
 	if e := json.Unmarshal([]byte(fileContent), &tc); e != nil {
 		Log("error", "unable to decode json into testcases")
@@ -44,7 +44,7 @@ func (tester *Tester) getTestCases() {
 // testCode writes the given code to a file, executes the file, checks the output against the test case and returns a boolean variable whether the code passed or not.
 func testCode(lang, code, in, out string) bool {
 	// * writing code to a file
-	filename := filepath.Join(getProbeDir(), randomFileName(lang))
+	filename := filepath.Join(getProbeDir(), "temp", randomFileName(lang))
 	writeToFile(filename, code+"\n\n"+in)
 
 	// * intialising output and error variables

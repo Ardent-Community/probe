@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-// getProbeDir returns the probe home directory, namely `~/.probe`.
+// getProbeDir returns the probe home directory, namely `~/.probe`. Also creates the directory if it doesnt exists.
 func getProbeDir() string {
 	usr, e := user.Current()
 	if e != nil {
@@ -29,7 +29,6 @@ func getProbeDir() string {
 		fmt.Println(e)
 		return ""
 	}
-
 	
 	// * determining probe's directory
 	dir := filepath.Join(usr.HomeDir, ".probe")
@@ -38,6 +37,13 @@ func getProbeDir() string {
 	if os.IsNotExist(er) {
 		os.Mkdir(dir, os.ModePerm)
 	}
+
+	tempDir := filepath.Join(dir, "temp")
+	_, err := os.Stat(tempDir)
+	if os.IsNotExist(err) {
+		os.Mkdir(tempDir, os.ModePerm)
+	}
+
 	return dir
 }
 
@@ -82,7 +88,7 @@ func writeToFile(filename, content string) {
 
 // ClearClutter deletes all the files present in probe's directory.
 func ClearClutter() {
-	files, er := ioutil.ReadDir(getProbeDir())
+	files, er := ioutil.ReadDir(filepath.Join(getProbeDir(), "temp"))
 	if er != nil {
 		Log("error", "unable to get files in the directory")
 		fmt.Println(er)
@@ -91,7 +97,7 @@ func ClearClutter() {
 
 	// * clearing all files in the probe's directory
 	for _, f := range files {
-		path := filepath.Join(getProbeDir(), f.Name())
+		path := filepath.Join(getProbeDir(), "temp", f.Name())
 		if e := os.Remove(path); e != nil {
 			Log("error", "unable to remove file "+path)
 			fmt.Println(e)
@@ -100,7 +106,7 @@ func ClearClutter() {
 }
 
 // readFile reads the given file and returns the string content of the same.
-func ReadFile(file string) string {
+func readFile(file string) string {
 	f, ferr := os.Open(file)
 	if ferr != nil {
 		Log("error", "unable to read file " + file)
