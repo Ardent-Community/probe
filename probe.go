@@ -27,7 +27,7 @@ func main() {
 	commando.
 		SetExecutableName(NAME).
 		SetVersion(VERSION).
-		SetDescription("probe is a CLI tool made to automate the process of solution validation for weekly challenges conducted in the Ardent-Community.\n")
+		SetDescription("probe is a CLI tool made to automate the process of solution validation for weekly challenges conducted in the Ardent-Community discord server.\n")
 
 	commando.
 		Register(nil).
@@ -53,7 +53,7 @@ func main() {
 				go func(username string, data map[string]string) {
 					lang := data["language"]
 					code := data["code"]
-					serve.Log("info", "running "+username+"'s solution written in "+lang)
+					serve.Log("info", fmt.Sprintf("running %v's solution written in %v", username, lang))
 
 					t := serve.Tester{
 						Lang:          lang,
@@ -62,10 +62,10 @@ func main() {
 					}
 					passed := t.PerformTests()
 					if passed {
-						serve.Log("success", username+"'s code passed")
+						serve.Log("success", fmt.Sprintf("%v's code passed", username))
 						winners = append(winners, username)
 					} else {
-						serve.Log("failure", username+"'s code failed")
+						serve.Log("failure", fmt.Sprintf("%v's code failed", username))
 					}
 					wg.Done()
 				}(username, data)
