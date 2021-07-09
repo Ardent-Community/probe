@@ -25,8 +25,8 @@ type Tester struct {
 
 // TestCases has python and javascript test cases, and is a part of the `Tester` struct.
 type TestCases struct {
-	PythonCases     map[string]string `json:pythonCases`
-	JavascriptCases map[string]string `json:javascriptCases`
+	PythonCases     map[string]string `json:"pythonCases"`
+	JavascriptCases map[string]string `json:"javascriptCases"`
 }
 
 // getTestCases reads the test cases from the given file and assigns them to the `Tester` struct.

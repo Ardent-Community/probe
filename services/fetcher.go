@@ -18,8 +18,8 @@ import (
 
 // Result struct contains all the parameters returned by the solutions API.
 type Result struct {
-	Ok bool `json:ok`
-	Solutions map[string]map[string]string `json:solutions`
+	Ok bool `json:"ok"`
+	Solutions map[string]map[string]string `json:"solutions"`
 }
 
 // GetSolutions makes a request to the API server and returns a `Result` struct filled with solutions.
