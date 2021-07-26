@@ -21,6 +21,44 @@ const (
 	VERSION string = "0.1.0"
 )
 
+func run(challengeNumber, testCasesFile string) {
+	wg := sync.WaitGroup{}
+	solutions := serve.GetSolutions(challengeNumber).Solutions
+
+	winners := []string{}
+	wg.Add(len(solutions))
+
+	for username, data := range solutions {
+		go func(username string, data map[string]string) {
+			lang := data["language"]
+			code := data["code"]
+			serve.Log("info", fmt.Sprintf("running %v's solution written in %v", username, lang))
+
+			t := serve.Tester{
+				Lang:          lang,
+				Code:          code,
+				TestCasesFile: testCasesFile,
+			}
+			passed := t.PerformTests()
+			if passed {
+				serve.Log("success", fmt.Sprintf("%v's code passed", username))
+				winners = append(winners, username)
+			} else {
+				serve.Log("failure", fmt.Sprintf("%v's code failed", username))
+			}
+			wg.Done()
+		}(username, data)
+	}
+
+	wg.Wait()
+	serve.ClearClutter()
+
+	serve.Log("info", "\nThe winners are:\n")
+	for i, v := range winners {
+		serve.Log("success", fmt.Sprintf("%v. %v", i+1, v))
+	}
+}
+
 func main() {
 	fmt.Println(NAME, VERSION)
 
@@ -43,41 +81,11 @@ func main() {
 		AddArgument("testCasesFile", "The path to the test cases file.", "").
 		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
 
-			wg := sync.WaitGroup{}
-			solutions := serve.GetSolutions(args["challengeNumber"].Value).Solutions
-
-			winners := []string{}
-			wg.Add(len(solutions))
-
-			for username, data := range solutions {
-				go func(username string, data map[string]string) {
-					lang := data["language"]
-					code := data["code"]
-					serve.Log("info", fmt.Sprintf("running %v's solution written in %v", username, lang))
-
-					t := serve.Tester{
-						Lang:          lang,
-						Code:          code,
-						TestCasesFile: args["testCasesFile"].Value,
-					}
-					passed := t.PerformTests()
-					if passed {
-						serve.Log("success", fmt.Sprintf("%v's code passed", username))
-						winners = append(winners, username)
-					} else {
-						serve.Log("failure", fmt.Sprintf("%v's code failed", username))
-					}
-					wg.Done()
-				}(username, data)
-			}
-
-			wg.Wait()
-			serve.ClearClutter()
-
-			serve.Log("info", "\nThe winners are:\n")
-			for i, v := range winners {
-				serve.Log("success", fmt.Sprintf("%v. %v", i+1, v))
-			}
+			run(
+				args["challengeNumber"].Value,
+				args["testCasesFile"].Value,
+			)
+			
 		})
 
 	commando.Parse(nil)
