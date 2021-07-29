@@ -3,7 +3,7 @@ Fetches solutions from the API and returns them as part of the Result struct.
 
 Author: Shravan Asati
 Originially Written: 25 June 2021
-Last Edited: 29 June 2021
+Last Edited: 29 July 2021
 */
 
 package services 
@@ -22,13 +22,26 @@ type Result struct {
 	Solutions map[string]map[string]string `json:"solutions"`
 }
 
+func getAPIKey() string {
+	apiKey := os.Getenv("PROBE_API_KEY")
+	if apiKey == "" {
+		panic("PROBE_API_KEY not set")
+	}
+	return apiKey
+}
+
+func decodeJSON(jsonStr []byte) Result {
+	result := Result{}
+	if e := json.Unmarshal(jsonStr, &result); e != nil {
+		panic("unable to write json to struct")
+	}
+	return result
+}
+
 // GetSolutions makes a request to the API server and returns a `Result` struct filled with solutions.
 func GetSolutions(challengeNumber string) Result {
 	// * getting the api key
-	apiKey := os.Getenv("PROBE_API_KEY")
-	if apiKey == "" {
-		panic("API KEY NOT FOUND")
-	}
+	apiKey := getAPIKey()
 
 	// * defining the url and http client
 	endpoint := "http://127.0.0.1:5000/api/solutions/" + challengeNumber 
@@ -58,10 +71,7 @@ func GetSolutions(challengeNumber string) Result {
 	}
 
 	// * writing response to json
-	result := Result{}
-	if e := json.Unmarshal(body, &result); e != nil {
-		panic("unable to write json to struct")
-	}
+	result := decodeJSON(body)
 
 	if !result.Ok {
 		panic("response not ok")
