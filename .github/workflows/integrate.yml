@@ -12,6 +12,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    env: 
+      PROBE_API_KEY: super-secret
     steps:
     - uses: actions/checkout@v2
 
