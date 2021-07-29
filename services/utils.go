@@ -86,7 +86,7 @@ func writeToFile(filename, content string) {
 	}
 }
 
-// ClearClutter deletes all the files present in probe's directory.
+// ClearClutter deletes all the files present in probe's temp directory.
 func ClearClutter() {
 	files, er := ioutil.ReadDir(filepath.Join(getProbeDir(), "temp"))
 	if er != nil {

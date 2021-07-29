@@ -9,6 +9,7 @@ Last Edited: 26 July 2021
 package services
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -55,4 +56,24 @@ func TestReadWriteFile(t *testing.T)  {
 			os.Remove(filepath.Join(cwd, test.fileName))
 		}
 	})
+}
+
+func Test_getProbeDir_ClearClutter(t *testing.T) {
+	probeDir := getProbeDir()
+
+	_, e := os.Stat(probeDir)
+	if os.IsNotExist(e) {
+		t.Error("Probe directory does not exist.")
+	}
+
+	writeToFile(filepath.Join(probeDir, "temp","test.txt"), "Test")
+	ClearClutter()
+
+	contents, er := ioutil.ReadDir(filepath.Join(probeDir, "temp"))
+	if er != nil {
+		t.Error("unable to get contents of ~/.probe/temp: ", er.Error())
+	}
+	if len(contents) != 0 {
+		t.Error("Clutter not cleared.")
+	}
 }
