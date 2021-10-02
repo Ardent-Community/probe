@@ -47,16 +47,8 @@ func testCode(lang, code, in, out string) bool {
 	filename := filepath.Join(getProbeDir(), "temp", randomFileName(lang))
 	writeToFile(filename, code+"\n\n"+in)
 
-	// * intialising output and error variables
-	var output string
-	var e error
-
 	// * getting output and error
-	if lang == "python" {
-		output, e = execute("python " + filename)
-	} else if lang == "javascript" {
-		output, e = execute("node " + filename)
-	}
+	output, e := execute(getExecutionCommand(filename))
 
 	// * checking if the code passed
 	if e != nil {
