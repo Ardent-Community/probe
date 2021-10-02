@@ -71,7 +71,7 @@ func execute(command string) (string, error) {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		Log("error", "wait failed " + err.Error())
+		// Log("error", "wait failed " + err.Error())
 		return "", err
 	}
 

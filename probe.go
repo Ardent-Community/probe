@@ -16,6 +16,7 @@ import (
 	"sync"
 
 	serve "github.com/Ardent-Community/probe/services"
+	"github.com/thatisuday/commando"
 	// "github.com/thatisuday/commando"
 )
 
@@ -86,13 +87,15 @@ func run(challengeNumber, testCasesFile string) {
 		},
 		"wrong_username1": {
 			"language": "python",
-			"code":     "def solution(n): print(n * n/n)",
+			"code":     "def solution(n): print(n * 2)",
 		},
 		"wrong_username2": {
 			"language": "javascript",
 			"code":     "const solution = (n) => {console.log(return n * n * n)}",
 		},
 	}
+
+	// solutions := serve.GetSolutions(challengeNumber).Solutions
 
 	// initialize winners as atomic
 	winners := &winnerDB{
@@ -139,35 +142,35 @@ func run(challengeNumber, testCasesFile string) {
 }
 
 func main() {
-	run("1", `./examples/testcases.json`)
-	// fmt.Println(NAME, VERSION)
+	// run("1", `./examples/testcases.json`)
+	fmt.Println(NAME, VERSION)
 
-	// commando.
-	// 	SetExecutableName(NAME).
-	// 	SetVersion(VERSION).
-	// 	SetDescription("probe is a CLI tool made to automate the process of solution validation for weekly challenges conducted in the Ardent-Community discord server.\n")
+	commando.
+		SetExecutableName(NAME).
+		SetVersion(VERSION).
+		SetDescription("probe is a CLI tool made to automate the process of solution validation for weekly challenges conducted in the Ardent-Community discord server.\n")
 
-	// commando.
-	// 	Register(nil).
-	// 	SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
-	// 		fmt.Println("\nExecute `probe -h` for help.")
-	// 	})
+	commando.
+		Register(nil).
+		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
+			commando.Parse([]string{"help"})
+		})
 
-	// commando.
-	// 	Register("run").
-	// 	SetShortDescription("Validates solutions.").
-	// 	SetDescription("The `run` command does, in order, makes a request to the API, grabs the solutions, and concurrently runs all the solutions against the test cases.").
-	// 	AddArgument("challengeNumber", "The challenge number to validate the solutions for.", "").
-	// 	AddArgument("testCasesFile", "The path to the test cases file.", "").
-	// 	SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
+	commando.
+		Register("run").
+		SetShortDescription("Validates solutions.").
+		SetDescription("The `run` command does, in order, makes a request to the API, grabs the solutions, and concurrently runs all the solutions against the test cases.").
+		AddArgument("challengeNumber", "The challenge number to validate the solutions for.", "").
+		AddArgument("testCasesFile", "The path to the test cases file.", "").
+		SetAction(func(args map[string]commando.ArgValue, flags map[string]commando.FlagValue) {
 
-	// 		run(
-	// 			args["challengeNumber"].Value,
-	// 			args["testCasesFile"].Value,
-	// 		)
+			run(
+				args["challengeNumber"].Value,
+				args["testCasesFile"].Value,
+			)
 
-	// 	})
+		})
 
-	// commando.Parse(nil)
+	commando.Parse(nil)
 
 }

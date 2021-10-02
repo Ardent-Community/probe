@@ -7,10 +7,12 @@ Last Edited: 29 June 2021
 */
 
 package services
+
 // package main
 
 import (
 	"encoding/json"
+	"strings"
 	// "fmt"
 	"path/filepath"
 )
@@ -55,7 +57,8 @@ func testCode(lang, code, in, out string) bool {
 		// Log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
-	if output != out {
+
+	if strings.TrimSpace(output) != strings.TrimSpace(out) {
 		// Log("error", fmt.Sprintf("the code failed `%v` test", in))
 		return false
 	}
