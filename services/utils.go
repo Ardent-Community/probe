@@ -18,7 +18,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"time"
 )
 
 // getProbeDir returns the probe home directory, namely `~/.probe`. Also creates the directory if it doesnt exists.
@@ -50,7 +49,6 @@ func getProbeDir() string {
 // randomFileName returns a random file name with letters and numbers and some valid symbols mixed.
 func randomFileName(lang string) string {
 	characters := "abcdefghijklmnopqrstuvwxyz-1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	rand.Seed(time.Now().UnixNano())
 
 	var filename string
 	for len(filename) <= 12 {
@@ -62,7 +60,7 @@ func randomFileName(lang string) string {
 	} else if lang == "javascript" {
 		filename += ".js"
 	} else {
-		Log("error", "invalid value for the lang parameter: "+lang)
+		panic("unsupported language")
 	}
 
 	return filename

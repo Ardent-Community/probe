@@ -7,14 +7,46 @@ Last Edited: 29 June 2021
 */
 
 package services
+
 // package main
 
 import (
 	// "fmt"
 	"io/ioutil"
 	"os/exec"
+	"runtime"
 	"strings"
 )
+
+func getExecutionCommand(filename string) string {
+	language := ""
+	if strings.HasSuffix(filename, ".py") {
+		language = "python"
+	} else if strings.HasSuffix(filename, ".js") {
+		language = "javascript"
+	} else {
+		panic("Invalid file extension")
+	}
+
+	switch language {
+	case "python":
+		switch runtime.GOOS {
+		case "windows":
+			return "python " + filename
+		case "linux", "darwin":
+			return "python3 " + filename
+		default:
+			panic("Unknown OS")
+		}
+	
+	case "javascript":
+		return "node " + filename
+
+	default:
+		panic("Unknown language")
+	}
+
+}
 
 // execute executes the given command and returns the string output and error of the process.
 func execute(command string) (string, error) {
@@ -39,7 +71,7 @@ func execute(command string) (string, error) {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		Log("error", "wait failed " + err.Error())
+		// Log("error", "wait failed " + err.Error())
 		return "", err
 	}
 
