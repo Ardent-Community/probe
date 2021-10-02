@@ -91,7 +91,7 @@ func run(challengeNumber, testCasesFile string) {
 		},
 		"wrong_username2": {
 			"language": "javascript",
-			"code":     "const solution = (n) => {console.log(return n * n * n)}",
+			"code":     "const solution = (n) => {console.log(return n * n * 1)}",
 		},
 	}
 
@@ -130,7 +130,7 @@ func run(challengeNumber, testCasesFile string) {
 		<-doneCh
 	}
 
-	// serve.ClearClutter()
+	serve.ClearClutter()
 
 	serve.Log("info", "\nThe winners are:\n")
 
