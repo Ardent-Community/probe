@@ -53,7 +53,7 @@ func testCode(lang, code, in, out string) bool {
 
 	// * getting output and error
 	if lang == "python" {
-		output, e = execute("python3 " + filename)
+		output, e = execute("python " + filename)
 	} else if lang == "javascript" {
 		output, e = execute("node " + filename)
 	}

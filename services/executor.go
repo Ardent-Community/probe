@@ -28,18 +28,19 @@ func execute(command string) (string, error) {
 	}
 
 	if err := cmd.Start(); err != nil {
-		Log("error", "start failed")
+		Log("error", "start failed " + err.Error())
 		return "", err
 	}
 
 	data, err := ioutil.ReadAll(stdout)
 	if err != nil {
-		Log("error", "reading failed")
+		Log("error", "reading failed " + err.Error())
 		return "", err
 	}
 
-	if we := cmd.Wait(); we != nil {
-		Log("error", "wait failed")
+	if err := cmd.Wait(); err != nil {
+		Log("error", "wait failed " + err.Error())
+		return "", err
 	}
 
 	return string(data), nil
