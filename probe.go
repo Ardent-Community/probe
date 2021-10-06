@@ -33,8 +33,8 @@ type processEntry struct {
 }
 
 type winner struct {
-	Username string
-	Language string
+	Username string `json:"username"`
+	Language string `json:"language"`
 }
 
 type winnerDB struct {
@@ -92,7 +92,7 @@ func run(challengeNumber, testCasesFile string) {
 
 	// solutions := serve.GetSolutions(challengeNumber).Solutions
 
-	// initialize winners as atomic
+	// initialize winners db
 	winners := &winnerDB{
 		winners: []*winner{},
 	}
