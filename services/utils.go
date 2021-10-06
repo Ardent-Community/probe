@@ -7,13 +7,14 @@ Originially Written: 19 June 2021
 Last Edited: 29 June 2021
 */
 
-package services 
-// package main 
+package services
+
+// package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
-	"bufio"
 	"math/rand"
 	"os"
 	"os/user"
@@ -28,7 +29,7 @@ func getProbeDir() string {
 		fmt.Println(e)
 		return ""
 	}
-	
+
 	// * determining probe's directory
 	dir := filepath.Join(usr.HomeDir, ".probe")
 
@@ -107,7 +108,7 @@ func ClearClutter() {
 func readFile(file string) string {
 	f, ferr := os.Open(file)
 	if ferr != nil {
-		Log("error", "unable to read file " + file)
+		Log("error", "unable to read file "+file)
 		panic(ferr)
 	}
 	defer f.Close()

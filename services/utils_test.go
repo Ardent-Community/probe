@@ -16,7 +16,6 @@ import (
 	"testing"
 )
 
-
 func TestRandomFileName(t *testing.T) {
 	fileName := randomFileName("python")
 	if !strings.HasSuffix(fileName, ".py") {
@@ -29,19 +28,18 @@ func TestRandomFileName(t *testing.T) {
 	}
 }
 
-
 type readWriteTest struct {
 	fileName, content string
 }
 
-func TestReadWriteFile(t *testing.T)  {
+func TestReadWriteFile(t *testing.T) {
 	readWriteTests := []readWriteTest{
 		{"test.txt", "This is a test file."},
 		{"test.json", `{"test": "This is a test file."}`},
 	}
-	
+
 	for _, test := range readWriteTests {
-		writeToFile(test.fileName, test.content) 
+		writeToFile(test.fileName, test.content)
 		if readFile(test.fileName) != test.content {
 			t.Error("Wrong content written to file.")
 		}
@@ -66,7 +64,7 @@ func Test_getProbeDir_ClearClutter(t *testing.T) {
 		t.Error("Probe directory does not exist.")
 	}
 
-	writeToFile(filepath.Join(probeDir, "temp","test.txt"), "Test")
+	writeToFile(filepath.Join(probeDir, "temp", "test.txt"), "Test")
 	ClearClutter()
 
 	contents, er := ioutil.ReadDir(filepath.Join(probeDir, "temp"))

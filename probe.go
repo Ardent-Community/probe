@@ -10,12 +10,13 @@ Last Edited: 30 June 2021
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"os"
 	"runtime"
 	"sync"
 
 	serve "github.com/Ardent-Community/probe/services"
+	"github.com/olekukonko/tablewriter"
 	"github.com/thatisuday/commando"
 	// "github.com/thatisuday/commando"
 )
@@ -68,6 +69,14 @@ func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan bool)
 	// close(*mutateCh)
 }
 
+func tabulate(winners *winnerDB) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Username", "Language"})
+	for _, winner := range winners.winners {
+		table.Append([]string{winner.Username, winner.Language})
+	}
+	table.Render()
+}
 
 func run(challengeNumber, testCasesFile string) {
 	// test solutions
@@ -128,11 +137,7 @@ func run(challengeNumber, testCasesFile string) {
 
 	serve.Log("info", "\nThe winners are:\n")
 
-	result, e := json.MarshalIndent(winners.winners, "", "  ")
-	if e != nil {
-		panic(e)
-	}
-	fmt.Println(string(result))
+	tabulate(winners)
 }
 
 func main() {

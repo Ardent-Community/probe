@@ -27,19 +27,19 @@ func Test_decodeJSON(t *testing.T) {
 		Solutions: map[string]map[string]string{
 			"username1": {
 				"language": "python",
-				"code": "def solution(n): print(n * n)",
+				"code":     "def solution(n): print(n * n)",
 			},
 			"username2": {
 				"language": "javascript",
-				"code": "const solution = (n) => {console.log(n * n)}",
+				"code":     "const solution = (n) => {console.log(n * n)}",
 			},
 			"wrong_username1": {
 				"language": "python",
-				"code": "def solution(n): print(n * n/n)",
+				"code":     "def solution(n): print(n * n/n)",
 			},
 			"wrong_username2": {
 				"language": "javascript",
-				"code": "const solution = (n) => {console.log(return n * n * n)}",
+				"code":     "const solution = (n) => {console.log(return n * n * n)}",
 			},
 		},
 	}

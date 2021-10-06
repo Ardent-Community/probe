@@ -6,8 +6,9 @@ Originially Written: 25 June 2021
 Last Edited: 29 July 2021
 */
 
-package services 
-// package main 
+package services
+
+// package main
 
 import (
 	"encoding/json"
@@ -18,7 +19,7 @@ import (
 
 // Result struct contains all the parameters returned by the solutions API.
 type Result struct {
-	Ok bool `json:"ok"`
+	Ok        bool                         `json:"ok"`
 	Solutions map[string]map[string]string `json:"solutions"`
 }
 
@@ -44,7 +45,7 @@ func GetSolutions(challengeNumber string) Result {
 	apiKey := getAPIKey()
 
 	// * defining the url and http client
-	endpoint := "http://127.0.0.1:5000/api/solutions/" + challengeNumber 
+	endpoint := "http://127.0.0.1:5000/api/solutions/" + challengeNumber
 	client := http.Client{}
 
 	// * making a request object

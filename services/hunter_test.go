@@ -35,5 +35,5 @@ func TestHunter(t *testing.T) {
 		if test.pass != result {
 			t.Errorf("Hunter test failed.\n Language: %s \nCode: %s \nExpected: %v \nGot: %v", test.lang, test.code, test.pass, result)
 		}
-}
+	}
 }

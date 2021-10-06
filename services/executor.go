@@ -38,7 +38,7 @@ func getExecutionCommand(filename string) string {
 		default:
 			panic("Unknown OS")
 		}
-	
+
 	case "javascript":
 		return "node " + filename
 
@@ -60,13 +60,13 @@ func execute(command string) (string, error) {
 	}
 
 	if err := cmd.Start(); err != nil {
-		Log("error", "start failed " + err.Error())
+		Log("error", "start failed "+err.Error())
 		return "", err
 	}
 
 	data, err := ioutil.ReadAll(stdout)
 	if err != nil {
-		Log("error", "reading failed " + err.Error())
+		Log("error", "reading failed "+err.Error())
 		return "", err
 	}
 

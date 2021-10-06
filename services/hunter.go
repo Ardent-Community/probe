@@ -8,6 +8,7 @@ Last Edited: 29 June 2021
 */
 
 package services
+
 // package main
 
 import (
@@ -47,7 +48,7 @@ func hunt(lang, code string) bool {
 		}
 
 	} else {
-		Log("error", "invalid lang to hunt for: " + lang)
+		Log("error", "invalid lang to hunt for: "+lang)
 	}
 	return false
 }
