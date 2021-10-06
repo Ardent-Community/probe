@@ -42,7 +42,7 @@ type winnerDB struct {
 	sync.Mutex
 }
 
-func processor(entryCh *chan *processEntry, mutateCh *chan *winner, doneCh chan bool) {
+func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan bool) {
 	for entry := range *entryCh {
 		serve.Log("info", fmt.Sprintf("running %v's solution written in %v", entry.username, entry.lang))
 		t := serve.Tester{
@@ -53,10 +53,12 @@ func processor(entryCh *chan *processEntry, mutateCh *chan *winner, doneCh chan 
 		passed := t.PerformTests()
 		if passed {
 			serve.Log("success", fmt.Sprintf("%v's code passed", entry.username))
-			*mutateCh <- &winner{
+			winners.Lock()
+			winners.winners = append(winners.winners, &winner{
 				Username: entry.username,
 				Language: entry.lang,
-			}
+			})
+			winners.Unlock()
 		} else {
 			serve.Log("failure", fmt.Sprintf("%v's code failed", entry.username))
 		}
@@ -66,13 +68,6 @@ func processor(entryCh *chan *processEntry, mutateCh *chan *winner, doneCh chan 
 	// close(*mutateCh)
 }
 
-func mutater(db *winnerDB, mutateCh *chan *winner) {
-	for winner := range *mutateCh {
-		db.Lock()
-		db.winners = append(db.winners, winner)
-		db.Unlock()
-	}
-}
 
 func run(challengeNumber, testCasesFile string) {
 	// test solutions
@@ -104,13 +99,12 @@ func run(challengeNumber, testCasesFile string) {
 
 	// initialize channels
 	entryCh := make(chan *processEntry)
-	mutateCh := make(chan *winner)
 	doneCh := make(chan bool)
 
-	// spawn processor and mutater goroutines
-	go mutater(winners, &mutateCh)
-	for i := 0; i < runtime.NumCPU(); i++ {
-		go processor(&entryCh, &mutateCh, doneCh)
+	// spawn processor goroutines
+	maxProcs := runtime.NumCPU()
+	for i := 0; i < maxProcs; i++ {
+		go processor(&entryCh, winners, doneCh)
 	}
 
 	// send entries to be processed
