@@ -157,7 +157,11 @@ func run(challengeNumber, testCasesFile string) {
 }
 
 func main() {
-	run("1", `./examples/testcases.json`)
+	// run("1", `./examples/testcases.json`)
+	
+	// ? tune this setting to improve performance
+	// runtime.GOMAXPROCS(4)
+
 	fmt.Println(NAME, VERSION)
 
 	commando.
