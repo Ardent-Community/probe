@@ -114,7 +114,7 @@ func run(challengeNumber, testCasesFile string) {
 
 	// initialize channels
 	entryCh := make(chan *processEntry)
-	doneCh := make(chan bool, 1)
+	doneCh := make(chan bool)
 
 	
 	// spawn processor goroutines
@@ -157,7 +157,7 @@ func run(challengeNumber, testCasesFile string) {
 }
 
 func main() {
-	// run("1", `./examples/testcases.json`)
+	run("1", `./examples/testcases.json`)
 	
 	// ? tune this setting to improve performance
 	// runtime.GOMAXPROCS(4)
