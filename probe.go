@@ -65,7 +65,6 @@ func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan bool)
 
 		doneCh <- true
 	}
-	// close(*mutateCh)
 }
 
 func tabulate(winners *winnerDB) {
@@ -96,6 +95,14 @@ func run(challengeNumber, testCasesFile string) {
 			"language": "javascript",
 			"code":     "const solution = (n) => {console.log(return n * n * 1)}",
 		},
+		"wrong_username3": {
+			"language": "python",
+			"code": "import time\nprint('haha')",
+		},
+		"wrong_username4": {
+			"language": "javascript",
+			"code": "import {time} from datetime;",
+		},
 	}
 
 	// solutions := serve.GetSolutions(challengeNumber).Solutions
@@ -107,13 +114,26 @@ func run(challengeNumber, testCasesFile string) {
 
 	// initialize channels
 	entryCh := make(chan *processEntry)
-	doneCh := make(chan bool)
+	doneCh := make(chan bool, 1)
 
+	
 	// spawn processor goroutines
 	maxProcs := runtime.NumCPU()
 	for i := 0; i < maxProcs; i++ {
 		go processor(&entryCh, winners, doneCh)
 	}
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	// listener goroutine
+	go func() {
+		for i := 0; i < len(solutions); i++ {
+			// fmt.Println("waiting")
+			<-doneCh
+		}
+		wg.Done()
+	}()
 
 	// send entries to be processed
 	for username, data := range solutions {
@@ -127,10 +147,7 @@ func run(challengeNumber, testCasesFile string) {
 
 	// closing entry channel
 	close(entryCh)
-
-	for i := 0; i < len(solutions); i++ {
-		<-doneCh
-	}
+	wg.Wait()
 
 	serve.ClearClutter()
 
@@ -140,7 +157,7 @@ func run(challengeNumber, testCasesFile string) {
 }
 
 func main() {
-	// run("1", `./examples/testcases.json`)
+	run("1", `./examples/testcases.json`)
 	fmt.Println(NAME, VERSION)
 
 	commando.
