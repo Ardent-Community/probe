@@ -42,7 +42,7 @@ type winnerDB struct {
 	sync.Mutex
 }
 
-func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan bool) {
+func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan struct{}) {
 	for entry := range *entryCh {
 		serve.Log("info", fmt.Sprintf("running %v's solution written in %v", entry.username, entry.lang))
 		t := serve.Tester{
@@ -63,7 +63,7 @@ func processor(entryCh *chan *processEntry, winners *winnerDB, doneCh chan bool)
 			serve.Log("failure", fmt.Sprintf("%v's code failed", entry.username))
 		}
 
-		doneCh <- true
+		doneCh <- struct{}{}
 	}
 }
 
@@ -105,6 +105,7 @@ func run(challengeNumber, testCasesFile string) {
 		},
 	}
 
+	// todo uncomment this when the API is ready, and delete above solutions map
 	// solutions := serve.GetSolutions(challengeNumber).Solutions
 
 	// initialize winners db
@@ -114,8 +115,10 @@ func run(challengeNumber, testCasesFile string) {
 
 	// initialize channels
 	entryCh := make(chan *processEntry)
-	doneCh := make(chan bool)
 
+	// empty struct because it occupies zero memory, and this channel doesnt contain
+	// any information but only signifies that a message is passed
+	doneCh := make(chan struct{}) 
 	
 	// spawn processor goroutines
 	maxProcs := runtime.NumCPU()
